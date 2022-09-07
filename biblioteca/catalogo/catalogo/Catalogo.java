@@ -64,8 +64,8 @@ public class Catalogo {
 		if (estaLleno()) {
 			System.out.println("El catalogo está lleno, no puede agregar más libros.");
 			return false;
-		}else{
-			this.libros[nroLibros++] = libro;
+		} else {
+			this.libros[nroLibros] = libro;
 			nroLibros++;
 			return true;
 		}
@@ -77,24 +77,30 @@ public class Catalogo {
 	* @return un libro {@code l} que pertenece a este {@code Catalogo} sii {@code l.titulo().equals(titulo)}, {@code null} en caso contrario.
 	*/
 	public Libro buscarPorTitulo(String titulo) {
-		for (int i = 0; i < this.nroLibros; i++) {
-			if (this.libros[i].titulo().equals(titulo)) {
-				return this.libros[i];
-			}
+		int i = 0;
+		Libro libro_buscado = libros[i];
+		
+		while (!((libro_buscado.titulo()).equals(titulo))) {
+			libro_buscado = libros[i++];
 		}
-		return null;
-	}
-	/*	
-	private String mostrarLibros() {
-		Libro libro = new Libro();
-		for (int i = 0; i < this.nroLibros; i++) {
-			libro = this.libros[i];
-			return libro.toString();
+		
+
+		if ((libro_buscado.titulo()).equals(titulo)) {
+			return libro_buscado;
+		} else {
+			System.out.println("El libro no se encontró en el catálogo");
+			return null;
 		}
+
 	}
+	
 	@Override
 	public String toString() {
-		return "Mostrando catálogo: \n" + mostrarLibros();
+		String catalogo = "Mostrando catálogo: \n";
+		for (int i = 0; i < nroLibros; i++) {
+			catalogo += libros[i];
+		}
+		return catalogo;
 	}
-	*/
+	
 }
