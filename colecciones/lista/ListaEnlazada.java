@@ -2,32 +2,47 @@ package colecciones.lista;
 
 
 public class ListaEnlazada<T> implements Lista<T> {
-  private Nodo <T> cabeza;
-  private int cantidad;
-  public static final int CAPACIDAD_POR_DEFECTO = 50;
-
+  
+  private Nodo<T> head;
+  private int size;
+  
   /**
   * Constructor básico de una lista enlazada 
   */
-  public ListaEnlazada () {
-    cabeza = null;
-    cantidad = 0;
+  public ListaEnlazada() {
+    head = null;
+    size = 0;
   }
 
   /**
    * Devuelve la cabeza de la lista
    */
-  public Nodo <T> cabeza () {
-    return cabeza;
+  public Nodo <T> head() {
+    return head;
   }
+  
   /**
 	* Agrega un elemento al final de la lista.
 	* @param elem el elemento a agregar
 	* @return {@code true} sii el elemento pudo ser agregado
 	*/
-	public boolean agregar(T elem){
-    cabeza.info(elem);
-    return true;
+	public boolean agregar(T elem) {
+
+	  Nodo<T> nodoNuevo = new Nodo<T>(elem);
+		
+		if (head() == null) {
+			head = nodoNuevo;
+		} else {
+			nodoNuevo.next(head());
+			
+			while (nodoNuevo.next() != null) {
+				nodoNuevo = nodoNuevo.next();
+			}
+			
+			nodoNuevo.next(nodoNuevo);
+			size++;
+		}
+		return true;
   }
 	
 	/**
@@ -36,13 +51,20 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @return {@code true} sii todos los elementos en {@code otraLista} fueron agregados
 	*/
 	public boolean agregarTodos(Lista<T> otraLista){
-    for (int i = 0; i < cantidad; i++) {
-      cabeza.siguiente();
-    }
-    while (cabeza == null && cantidad != CAPACIDAD_POR_DEFECTO) {
-      otraLista.agregar(otraLista.cabeza.info);
-      cantidad++;
-    }
+	  if (head() == null) {
+			head = otraLista.head;
+		} else {
+			Nodo<T> aux = head;
+			
+			while (aux.next() != null) {
+				aux = aux.next();
+			}
+			
+			aux.next(otraLista.head);
+			
+			this.size += otraLista.elementos();
+		}
+    return true;
   }
 
 	/**
@@ -52,7 +74,33 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @return {@code true} sii el elemento pudo ser agregado
 	* @throws IndexOutOfBoundsException si {@code indice} &lt; {@code 0}
 	*/
-	public boolean insertar(T elem, int indice);
+	public boolean insertar(T elem, int indice) {
+		//Si esta fuera del rango tira exception
+		if (indice < 0 || indice > elementos()) {
+			throw new IndexOutOfBoundsException();
+		} else {
+			//Crea nuevo nodo con el elemento a insertar
+			Nodo<T> nodoNuevo = new Nodo<T>(elem);
+			//nodoNuevo apunta al head de la lista
+			nodoNuevo.next(head());
+			
+			int counter = 0;
+			
+			while (counter != (indice - 1)) {
+				nodoNuevo = nodoNuevo.next();
+				counter++;
+			}
+			//nodoTemp apunta a la posición anterior
+			Nodo<T> nodoTemp = nodoNuevo;
+			//nodoNuevo avanza a la posición del indice
+			nodoNuevo = nodoNuevo.next();
+			//Realizo la inserción
+			nodoNuevo.next(nodoTemp.next());
+			nodoTemp.next(nodoNuevo);
+
+			return true;
+		}
+	}
 
 	/**
 	* Elimina un elemento de esta lista en una posición particular.
@@ -93,13 +141,17 @@ public class ListaEnlazada<T> implements Lista<T> {
 	/**
 	* Remueve todos los elementos en la lista.
 	*/
-	public void vaciar();
+	public void vaciar() {
+		head = null;
+	}
 	
 	/**
 	* Retorna la cantidad de elementos agregados a la lista.
 	* @return cantidad de elementos en la lista
 	*/
-	public int elementos();
+	public int elementos() {
+		return size;
+	}
 
 	/**
 	* Permite evaluar si la lista no tiene elementos.
@@ -107,7 +159,9 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* <pre>lista.elementos() == 0</pre>
 	* @return {@code true} sii la pila no tiene elementos
 	*/
-	public boolean esVacia();
+	public boolean esVacia() {
+	  return head == null;
+	}
 
 	/**
 	* Invariante de clase.
