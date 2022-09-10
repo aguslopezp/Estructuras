@@ -54,7 +54,7 @@ public interface Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code indice} &lt; {@code 0} || {@code indice} &ge; {@code #elementos()})
 	* @see #elementos() 
 	*/
-	//public T eliminar(int indice);
+	public T eliminar(int indice);
 
 	/**
 	* Obtiene un elemento de esta lista en una posición particular.
@@ -113,8 +113,8 @@ public interface Lista<T> {
 	* Elementos adyacentes están separados mediante los caractéres ", " (coma y espacio). Los elementos son convertidos mediante {@code String.valueOf(Object)}.
 	* @return una representación como {@code String} de esta lista
 	*/
-	//@Override
-	//public String toString();
+	@Override
+	public String toString();
 	
 	/**
 	* Evalúa igualdad entre esta y otra lista. La igualdad considera que el tamaño de ambas listas es el mismo, y que los elementos de ambas listas son iguales considerando el orden de los mismos de acuerdo a la implementación de cada lista.

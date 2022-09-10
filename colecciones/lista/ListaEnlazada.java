@@ -15,7 +15,8 @@ public class ListaEnlazada<T> implements Lista<T> {
   }
 
   /**
-   * Devuelve la cabeza de la lista
+   * Devuelve el nodo que está en la cabeza de la lista
+	 * @return {@code head} de la {@code ListaEnlazada}
    */
   public Nodo<T> head() {
     return head;
@@ -26,6 +27,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @param elem el elemento a agregar
 	* @return {@code true} sii el elemento pudo ser agregado
 	*/
+	@Override
 	public boolean agregar(T elem) {
 		//Creo nuevo nodo con el elemento a agregar
 		Nodo<T> nodoNuevo = new Nodo<T>(elem);
@@ -49,57 +51,53 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @param otraLista lista conteniendo todos los elementos a agregar al final de esta lista
 	* @return {@code true} sii todos los elementos en {@code otraLista} fueron agregados
 	*/
+	@Override
 	public boolean agregarTodos(Lista<T> otraLista){
-		Nodo<T> nodoTemp = head;
-		int counter = 0;
-		while (nodoTemp.next() != null) {
-			nodoTemp = nodoTemp.next();
-			counter++;
-		}
 		for (int i = 0; i < otraLista.elementos(); i++) {
-			this.insertar(otraLista.obtener(i), counter);
-			counter++;
+			agregar(otraLista.obtener(i));
 		}
-		this.size += otraLista.elementos();
     return true;
   }
 
 	/**
 	* Agrega un elemento en una posicion particular de la lista.
 	* @param elem el elemento a agregar
-	* @param indice el indice donde se agrega el elemento
+	* @param indice el indice donde se agrega el elemento. Comenzando desde el 0 como primer elemento.
 	* @return {@code true} sii el elemento pudo ser agregado
 	* @throws IndexOutOfBoundsException si {@code indice} &lt; {@code 0}
 	*/
+	@Override
 	public boolean insertar(T elem, int indice) {
-		
 		if (indice >= 0 && indice <= elementos()) {
 			//Crea nuevo nodo con el elemento a insertar
 			Nodo<T> nodoNuevo = new Nodo<T>(elem);
 			//nodoTemp le asigno head para recorrer la lista
 			Nodo<T> nodoTemp = head;
-			//3 casos: insertar a la cabeza, al final(metodo agregar) y en el medio.
+
+			//2 casos: insertar a la cabeza o inserción normal
 			if (indice == 0) {
+				//Caso insertar a la cabeza
 				nodoNuevo.next(nodoTemp);
 				head = nodoNuevo;
 				size++;
-			} else if (indice == elementos()) {
-				this.agregar(elem);
 			} else {
+				//Caso inserción normal
 				//contador auxiliar para llegar a la posicion a insertar
 				int counter = 0;
-				//Después del while nodoTemp queda en la posición anterior al indice
+				//Después del while nodoTemp apunta a la posición anterior al indice
 				while (counter != (indice-1)) {
 					nodoTemp = nodoTemp.next();
 					counter++;
 				}
+				//nodoNuevo apunta al siguiente de nodoTemp
 				nodoNuevo.next(nodoTemp.next());
+				//nodoTemp apunta a nodoNuevo para así quedar en la posición indicada 
 				nodoTemp.next(nodoNuevo);
 				size++;
 			}
 			return true;
 		} else {
-			throw new IndexOutOfBoundsException("Fuera de rango en el insertar.");
+			throw new IndexOutOfBoundsException("Índice fuera de rango.\nÍndice ingresado: " + indice + "\nÍndice mayor posible: " + elementos());
 		}
 	}
 
@@ -110,7 +108,41 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code indice} &lt; {@code 0} || {@code indice} &ge; {@code #elementos()})
 	* @see #elementos() 
 	*/
-	//public T eliminar(int indice);
+	@Override
+	public T eliminar(int indice) {
+		if (!esVacia()){
+			if (indice >= 0 && indice < elementos()) {
+				//Caso eliminar a la cabeza
+				if (indice == 0){
+					T eliminado = head.info();
+					head = head.next();
+					size--;
+					return eliminado;
+				} else {
+				//Caso eliminación normal
+				Nodo<T> nodoTemp = head;
+				int cont = 0;
+				//nodoTemp apunta al anterior a eliminar
+				while (cont != (indice - 1)){
+					nodoTemp = nodoTemp.next();
+					cont++;
+				}
+				//Guardo la info del nodo siguiente (nodo a eliminar) para poder retornarlo.
+				T eliminado = (nodoTemp.next()).info();
+
+				//nodoTemp apunta al siguiente del siguiente.
+				//Asi el nodo a eliminar queda sin posible acceso y lo elimina el garbage collector.
+				nodoTemp.next((nodoTemp.next()).next());
+				size--;
+				return eliminado;
+				}
+			} else {
+				throw new IndexOutOfBoundsException("El índice está fuera de rango en 'eliminar'.");
+			}
+		} else {
+			throw new Error("La lista está vacía. No se puede eliminar.");
+		}
+	}
 
 	/**
 	* Obtiene un elemento de esta lista en una posición particular.
@@ -119,6 +151,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code indice} &lt; {@code 0} || {@code indice} &ge; {@code #elementos()})
 	* @see #elementos() 
 	*/
+	@Override
 	public T obtener(int indice) {
 		if (indice >= 0 && indice < elementos()) {
 			Nodo<T> nodo = head;
@@ -127,7 +160,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 			}
 			return nodo.info();
 		} else {
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException("Índice fuera de rango en 'obtener'");
 		}
 	}
 	
@@ -140,6 +173,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code fromInd} &lt; {@code 0} || {@code hastaInd} &gt; {@code #elementos()} || {@code desdeInd} &gt; {@code hastaInd})
 	* @see #elementos() 
 	*/
+	//@Override
 	//public Lista<T> subLista(int desdeInd, int hastaInd);
 
 	/**
@@ -152,6 +186,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	/**
 	* Remueve todos los elementos en la lista.
 	*/
+	@Override
 	public void vaciar() {
 		head = null;
 	}
@@ -160,6 +195,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* Retorna la cantidad de elementos agregados a la lista.
 	* @return cantidad de elementos en la lista
 	*/
+	@Override
 	public int elementos() {
 		return size;
 	}
@@ -170,6 +206,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* <pre>lista.elementos() == 0</pre>
 	* @return {@code true} sii la pila no tiene elementos
 	*/
+	@Override
 	public boolean esVacia() {
 	  return head == null;
 	}
