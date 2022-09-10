@@ -1,6 +1,5 @@
 package colecciones.lista;
 
-
 public class ListaEnlazada<T> implements Lista<T> {
   
   private Nodo<T> head;
@@ -166,22 +165,48 @@ public class ListaEnlazada<T> implements Lista<T> {
 	
 	/**
 	* Retorna la porción de esta lista entre los índice especificados {@code desdeInd}, inclusivo, y {@code hastaInd}, exclusivo, en una nueva lista.
-	* Si {@code fromInd} es igual a {@code hastaInd} se retorna un a lista vacía.
+	* Si {@code desdeInd} es igual a {@code hastaInd} se retorna una lista vacía.
 	* @param desdeInd el índice inferior, inclusivo
 	* @param hastaInd el índice superior, exclusivo
 	* @return una nueva lista formada con los elementos entre {@code desdeInd} hasta {@code hastaInd - 1} de esta lista
-	* @throws IndexOutOfBoundsException si ({@code fromInd} &lt; {@code 0} || {@code hastaInd} &gt; {@code #elementos()} || {@code desdeInd} &gt; {@code hastaInd})
+	* @throws IndexOutOfBoundsException si ({@code desdeInd} &lt; {@code 0} || {@code hastaInd} &gt; {@code #elementos()} || {@code desdeInd} &gt; {@code hastaInd})
 	* @see #elementos() 
 	*/
-	//@Override
-	//public Lista<T> subLista(int desdeInd, int hastaInd);
+	@Override
+	public Lista<T> subLista(int desdeInd, int hastaInd) {
+		if (desdeInd >= 0 && hastaInd <= elementos() && desdeInd <= hastaInd) {
+			Lista<T> subl = new ListaEnlazada<T>();
+			if (desdeInd == hastaInd) {
+				return subl;
+			} else {
+				while (desdeInd != hastaInd) {
+					subl.agregar(obtener(desdeInd));
+					desdeInd++;
+				}
+				return subl;
+			}
+		} else {
+			throw new IndexOutOfBoundsException("Índices fuera de rango en 'subLista'.");
+		}
+	}
 
 	/**
 	* Evalua si esta lista contiene un elemento particular, utilizando el método {@code equals(Object)}.
 	* @param elem el elemento a buscar
 	* @return {@code true} sii, existe un elemento {@code e} en la lista, tal que {@code e == null && elem == null || e.equals(elem)}
 	*/
-	//public boolean contiene(T elem);
+	@Override
+	public boolean contiene(T elem) {
+		Nodo<T> nodoTemp = head;
+		while (!(nodoTemp.info().equals(elem)) && nodoTemp.next() != null) {
+			nodoTemp = nodoTemp.next();
+		}
+		if (nodoTemp.info().equals(elem)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/**
 	* Remueve todos los elementos en la lista.
@@ -189,6 +214,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	@Override
 	public void vaciar() {
 		head = null;
+		size = 0;
 	}
 	
 	/**
@@ -237,8 +263,30 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* La igualdad entre elementos se realiza considerando si ambos son {@code null} o, en caso contrario, mediante el método {@code equals(Object)}.
 	* @return {@code true} sii ambas listas tienen los mismos elementos.
 	*/
-	//@Override
-	//public boolean equals(Object otro);
+	@Override
+	public boolean equals(Object otro) {
+		
+		if (!(otro instanceof Lista)){
+			return false;
+		}
+
+		Lista<T> otraLista = (Lista<T>) otro;
+		Nodo<T> nodoTemp = head;
+		if (otraLista.elementos() != elementos()){
+			return false;
+		} else {
+			int i = 0;
+			while (nodoTemp.next() != null) {
+				if((otraLista.obtener(i)).equals(obtener(i))){
+					nodoTemp = nodoTemp.next();
+					i++;
+				} else {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 
 
 }

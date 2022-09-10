@@ -6,6 +6,7 @@ public class mainListaEnlazada {
     System.out.println("Creo dos listas enlazadas vacías de enteros.");
     ListaEnlazada<Integer> l = new ListaEnlazada<Integer>();
     ListaEnlazada<Integer> o = new ListaEnlazada<Integer>();
+    ListaEnlazada<Integer> l2 = new ListaEnlazada<Integer>();
     System.out.println("l: " + l);
     System.out.println("o: " + o);
     System.out.println("");
@@ -39,5 +40,31 @@ public class mainListaEnlazada {
     System.out.println("Agregar lista 'o' al final de lista 'l': ");
     l.agregarTodos(o);
     System.out.println("l: " + l);
+    System.out.println("");
+
+    int desde = 1;
+    int hasta = 5;
+    System.out.println("Hacer sublista de 'l' desde " + desde + " hasta " + hasta + ": ");
+    System.out.println(l.subLista(desde, hasta));
+    System.out.println("");
+
+    int eBuscar = 2;
+    System.out.println("'l' contiene " + eBuscar + "? " + l.contiene(eBuscar));
+
+    System.out.println("'l' y 'o' son iguales? " + l.equals(o));
+    System.out.println("");
+    l2.agregar(1);
+    l2.agregar(2);
+    l2.agregar(3);
+    l2.agregar(9);
+    l2.agregar(8);
+    l2.agregar(7);
+    System.out.println("l : " + l);
+    System.out.println("l2 : " + l2);
+    System.out.println("'l' y 'l2' son iguales? " + l.equals(l2));
+
+    System.out.println("Vacío 'l'...");
+    l.vaciar();
+    System.out.println("l : " + l);
   }
 }
