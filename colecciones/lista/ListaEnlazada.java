@@ -17,7 +17,7 @@ public class ListaEnlazada<T> implements Lista<T> {
   /**
    * Devuelve la cabeza de la lista
    */
-  public Nodo <T> head() {
+  public Nodo<T> head() {
     return head;
   }
   
@@ -27,19 +27,18 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @return {@code true} sii el elemento pudo ser agregado
 	*/
 	public boolean agregar(T elem) {
-
-	  Nodo<T> nodoNuevo = new Nodo<T>(elem);
-		
-		if (head() == null) {
+		//Creo nuevo nodo con el elemento a agregar
+		Nodo<T> nodoNuevo = new Nodo<T>(elem);
+		//Si la lista esta vacía inserto en el primer lugar
+		if (esVacia()) {
 			head = nodoNuevo;
+			size++;
 		} else {
-			nodoNuevo.next(head());
-			
-			while (nodoNuevo.next() != null) {
-				nodoNuevo = nodoNuevo.next();
+			Nodo<T> nodoTemp = head;
+			while (nodoTemp.next() != null) {
+				nodoTemp = nodoTemp.next();
 			}
-			
-			nodoNuevo.next(nodoNuevo);
+			nodoTemp.next(nodoNuevo);
 			size++;
 		}
 		return true;
@@ -51,19 +50,17 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @return {@code true} sii todos los elementos en {@code otraLista} fueron agregados
 	*/
 	public boolean agregarTodos(Lista<T> otraLista){
-	  if (head() == null) {
-			head = otraLista.head;
-		} else {
-			Nodo<T> aux = head;
-			
-			while (aux.next() != null) {
-				aux = aux.next();
-			}
-			
-			aux.next(otraLista.head);
-			
-			this.size += otraLista.elementos();
+		Nodo<T> nodoTemp = head;
+		int counter = 0;
+		while (nodoTemp.next() != null) {
+			nodoTemp = nodoTemp.next();
+			counter++;
 		}
+		for (int i = 0; i < otraLista.elementos(); i++) {
+			this.insertar(otraLista.obtener(i), counter);
+			counter++;
+		}
+		this.size += otraLista.elementos();
     return true;
   }
 
@@ -75,30 +72,34 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @throws IndexOutOfBoundsException si {@code indice} &lt; {@code 0}
 	*/
 	public boolean insertar(T elem, int indice) {
-		//Si esta fuera del rango tira exception
-		if (indice < 0 || indice > elementos()) {
-			throw new IndexOutOfBoundsException();
-		} else {
+		
+		if (indice >= 0 && indice <= elementos()) {
 			//Crea nuevo nodo con el elemento a insertar
 			Nodo<T> nodoNuevo = new Nodo<T>(elem);
-			//nodoNuevo apunta al head de la lista
-			nodoNuevo.next(head());
-			
-			int counter = 0;
-			
-			while (counter != (indice - 1)) {
-				nodoNuevo = nodoNuevo.next();
-				counter++;
+			//nodoTemp le asigno head para recorrer la lista
+			Nodo<T> nodoTemp = head;
+			//3 casos: insertar a la cabeza, al final(metodo agregar) y en el medio.
+			if (indice == 0) {
+				nodoNuevo.next(nodoTemp);
+				head = nodoNuevo;
+				size++;
+			} else if (indice == elementos()) {
+				this.agregar(elem);
+			} else {
+				//contador auxiliar para llegar a la posicion a insertar
+				int counter = 0;
+				//Después del while nodoTemp queda en la posición anterior al indice
+				while (counter != (indice-1)) {
+					nodoTemp = nodoTemp.next();
+					counter++;
+				}
+				nodoNuevo.next(nodoTemp.next());
+				nodoTemp.next(nodoNuevo);
+				size++;
 			}
-			//nodoTemp apunta a la posición anterior
-			Nodo<T> nodoTemp = nodoNuevo;
-			//nodoNuevo avanza a la posición del indice
-			nodoNuevo = nodoNuevo.next();
-			//Realizo la inserción
-			nodoNuevo.next(nodoTemp.next());
-			nodoTemp.next(nodoNuevo);
-
 			return true;
+		} else {
+			throw new IndexOutOfBoundsException("Fuera de rango en el insertar.");
 		}
 	}
 
@@ -109,7 +110,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code indice} &lt; {@code 0} || {@code indice} &ge; {@code #elementos()})
 	* @see #elementos() 
 	*/
-	public T eliminar(int indice);
+	//public T eliminar(int indice);
 
 	/**
 	* Obtiene un elemento de esta lista en una posición particular.
@@ -118,7 +119,17 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code indice} &lt; {@code 0} || {@code indice} &ge; {@code #elementos()})
 	* @see #elementos() 
 	*/
-	public T obtener(int indice);
+	public T obtener(int indice) {
+		if (indice >= 0 && indice < elementos()) {
+			Nodo<T> nodo = head;
+			for (int i = 0; i < indice; i++) {
+				nodo = nodo.next();
+			}
+			return nodo.info();
+		} else {
+			throw new IndexOutOfBoundsException();
+		}
+	}
 	
 	/**
 	* Retorna la porción de esta lista entre los índice especificados {@code desdeInd}, inclusivo, y {@code hastaInd}, exclusivo, en una nueva lista.
@@ -129,14 +140,14 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code fromInd} &lt; {@code 0} || {@code hastaInd} &gt; {@code #elementos()} || {@code desdeInd} &gt; {@code hastaInd})
 	* @see #elementos() 
 	*/
-	public Lista<T> subLista(int desdeInd, int hastaInd);
+	//public Lista<T> subLista(int desdeInd, int hastaInd);
 
 	/**
 	* Evalua si esta lista contiene un elemento particular, utilizando el método {@code equals(Object)}.
 	* @param elem el elemento a buscar
 	* @return {@code true} sii, existe un elemento {@code e} en la lista, tal que {@code e == null && elem == null || e.equals(elem)}
 	*/
-	public boolean contiene(T elem);
+	//public boolean contiene(T elem);
 
 	/**
 	* Remueve todos los elementos en la lista.
@@ -167,7 +178,7 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* Invariante de clase.
 	* @return {@code true} sii la lista satisface su invariante de clase
 	*/
-	public boolean repOK();
+	//public boolean repOK();
 
 	/**
 	* Retorna una representación como {@code String} de esta lista. La representación como {@code String} consiste de los elementos en esta lista, en el orden correspondiente a la implementación de la misma, encerrados entre corchetes ("[]"). 
@@ -175,15 +186,22 @@ public class ListaEnlazada<T> implements Lista<T> {
 	* @return una representación como {@code String} de esta lista
 	*/
 	@Override
-	public String toString();
+	public String toString() {
+		String list = "[ ";
+		for (int i = 0; i < elementos(); i++) {
+			list += obtener(i) + " ";
+		}
+		list += "]";
+		return list;
+	}
 	
 	/**
 	* Evalúa igualdad entre esta y otra lista. La igualdad considera que el tamaño de ambas listas es el mismo, y que los elementos de ambas listas son iguales considerando el orden de los mismos de acuerdo a la implementación de cada lista.
 	* La igualdad entre elementos se realiza considerando si ambos son {@code null} o, en caso contrario, mediante el método {@code equals(Object)}.
 	* @return {@code true} sii ambas listas tienen los mismos elementos.
 	*/
-	@Override
-	public boolean equals(Object otro);
+	//@Override
+	//public boolean equals(Object otro);
 
 
 }

@@ -45,7 +45,7 @@ public class Nodo<T> {
     if (info != null) {
       return info.toString();
     } else {
-      return null;
+      return "Nothing";
     }
     
   }

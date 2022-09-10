@@ -54,7 +54,7 @@ public interface Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code indice} &lt; {@code 0} || {@code indice} &ge; {@code #elementos()})
 	* @see #elementos() 
 	*/
-	public T eliminar(int indice);
+	//public T eliminar(int indice);
 
 	/**
 	* Obtiene un elemento de esta lista en una posición particular.
@@ -74,14 +74,14 @@ public interface Lista<T> {
 	* @throws IndexOutOfBoundsException si ({@code fromInd} &lt; {@code 0} || {@code hastaInd} &gt; {@code #elementos()} || {@code desdeInd} &gt; {@code hastaInd})
 	* @see #elementos() 
 	*/
-	public Lista<T> subLista(int desdeInd, int hastaInd);
+	//public Lista<T> subLista(int desdeInd, int hastaInd);
 
 	/**
 	* Evalua si esta lista contiene un elemento particular, utilizando el método {@code equals(Object)}.
 	* @param elem el elemento a buscar
 	* @return {@code true} sii, existe un elemento {@code e} en la lista, tal que {@code e == null && elem == null || e.equals(elem)}
 	*/
-	public boolean contiene(T elem);
+	//public boolean contiene(T elem);
 
 	/**
 	* Remueve todos los elementos en la lista.
@@ -106,22 +106,22 @@ public interface Lista<T> {
 	* Invariante de clase.
 	* @return {@code true} sii la lista satisface su invariante de clase
 	*/
-	public boolean repOK();
+	//public boolean repOK();
 
 	/**
 	* Retorna una representación como {@code String} de esta lista. La representación como {@code String} consiste de los elementos en esta lista, en el orden correspondiente a la implementación de la misma, encerrados entre corchetes ("[]"). 
 	* Elementos adyacentes están separados mediante los caractéres ", " (coma y espacio). Los elementos son convertidos mediante {@code String.valueOf(Object)}.
 	* @return una representación como {@code String} de esta lista
 	*/
-	@Override
-	public String toString();
+	//@Override
+	//public String toString();
 	
 	/**
 	* Evalúa igualdad entre esta y otra lista. La igualdad considera que el tamaño de ambas listas es el mismo, y que los elementos de ambas listas son iguales considerando el orden de los mismos de acuerdo a la implementación de cada lista.
 	* La igualdad entre elementos se realiza considerando si ambos son {@code null} o, en caso contrario, mediante el método {@code equals(Object)}.
 	* @return {@code true} sii ambas listas tienen los mismos elementos.
 	*/
-	@Override
-	public boolean equals(Object otro);
+	//@Override
+	//public boolean equals(Object otro);
 
 }
