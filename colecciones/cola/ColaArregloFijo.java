@@ -2,6 +2,8 @@ package colecciones.cola;
 
 import java.util.Collection;
 
+import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
+
 /**
 * Implementación basada en arreglos de tamaño fijo de la interfaz {@code Cola}.
 * @see colecciones.cola.Cola
@@ -50,17 +52,25 @@ public class ColaArregloFijo<T> implements Cola<T> {
 
 	@Override
 	public boolean esVacia() {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");	
+		return elementos == 0;	
 	}
 
 	@Override
 	public int elementos() {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");
+		return elementos;
 	}
 
 	@Override
 	public boolean encolar(T elem) {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");		
+		if (elementos() == arreglo.length) {
+			return false;
+		} else {
+			for (int i = elementos()-1; i >= 0; i++) {
+				arreglo[i+1] = arreglo[i];
+			}
+			arreglo[0] = elem;
+			return true;
+		}
 	}
 
 	@Override
