@@ -4,13 +4,15 @@ public class ListaArray<T> implements Lista<T>{
   
 	//Atributos
   private Object[] list;
+
+	//Capacidad máxima de memoria
+  private static final int MAX_ELEMENTS = 100;
+
 	//cantidad de elementos que contiene la lista
   private int cantElem;
 	//capacidad máxima del arreglo
 	private int capacidad;
 
-	//Capacidad máxima de memoria
-  private static final int MAX_ELEMENTS = 100;
   
   //Constructor de lista vacía
   public ListaArray(int capacidad){
@@ -138,21 +140,49 @@ public class ListaArray<T> implements Lista<T>{
 	
 	/**
 	* Retorna la porción de esta lista entre los índice especificados {@code desdeInd}, inclusivo, y {@code hastaInd}, exclusivo, en una nueva lista.
-	* Si {@code fromInd} es igual a {@code hastaInd} se retorna un a lista vacía.
+	* Si {@code desdeInd} es igual a {@code hastaInd} se retorna un a lista vacía.
 	* @param desdeInd el índice inferior, inclusivo
 	* @param hastaInd el índice superior, exclusivo
 	* @return una nueva lista formada con los elementos entre {@code desdeInd} hasta {@code hastaInd - 1} de esta lista
 	* @throws IndexOutOfBoundsException si ({@code fromInd} &lt; {@code 0} || {@code hastaInd} &gt; {@code #elementos()} || {@code desdeInd} &gt; {@code hastaInd})
 	* @see #elementos() 
 	*/
-	//public Lista<T> subLista(int desdeInd, int hastaInd);
+	public Lista<T> subLista(int desdeInd, int hastaInd) {
+		if (desdeInd >= 0 && hastaInd <= elementos() && desdeInd <= hastaInd) {
+			//Los indices son correctos
+			//Creo la sublista
+			Lista<T> sublist = new ListaArray<T>(hastaInd - desdeInd);
+			if (desdeInd == hastaInd) {
+				return sublist;
+			} else {
+				for (int i = desdeInd; i < hastaInd; i++) {
+					sublist.agregar(obtener(i));
+				}
+				return sublist;
+			}
+		} else {
+			throw new IndexOutOfBoundsException("Indices incorrectos en 'subLista'.");
+		}
+	}
 
 	/**
 	* Evalua si esta lista contiene un elemento particular, utilizando el método {@code equals(Object)}.
 	* @param elem el elemento a buscar
 	* @return {@code true} sii, existe un elemento {@code e} en la lista, tal que {@code e == null && elem == null || e.equals(elem)}
 	*/
-	//public boolean contiene(T elem);
+	public boolean contiene(T elem) {
+		int i = 0;
+		while (!(obtener(i).equals(elem)) && i < elementos()) {
+			i++;
+		}
+		if (obtener(i).equals(elem)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	
+	}
 
 	/**
 	* Remueve todos los elementos en la lista.
@@ -194,7 +224,11 @@ public class ListaArray<T> implements Lista<T>{
 	public String toString(){
 	  String list = "[ ";
 	  for (int i = 0; i < cantElem; i++) {
-	    list += obtener(i) + " ";
+			if (i < (cantElem - 1)){
+	    	list += String.valueOf(obtener(i)) + ", ";
+			} else {
+				list += String.valueOf(obtener(i)) + " ";
+			}
 	  }
 	  list += "]";
 	  return list;
