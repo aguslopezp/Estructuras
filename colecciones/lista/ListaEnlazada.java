@@ -276,15 +276,15 @@ public class ListaEnlazada<T> implements Lista<T> {
 			return false;
 		} else {
 			int i = 0;
-			while (nodoTemp.next() != null) {
-				if((otraLista.obtener(i)).equals(obtener(i))){
-					nodoTemp = nodoTemp.next();
-					i++;
-				} else {
-					return false;
-				}
+			while (nodoTemp.next() != null && (otraLista.obtener(i)).equals(obtener(i))) {
+				nodoTemp = nodoTemp.next();
+				i++;
 			}
-			return true;
+			if((otraLista.obtener(i)).equals(obtener(i))){
+				return true;
+			} else {
+				return true;
+			}
 		}
 	}
 

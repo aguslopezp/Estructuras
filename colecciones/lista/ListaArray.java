@@ -239,8 +239,26 @@ public class ListaArray<T> implements Lista<T>{
 	* La igualdad entre elementos se realiza considerando si ambos son {@code null} o, en caso contrario, mediante el método {@code equals(Object)}.
 	* @return {@code true} sii ambas listas tienen los mismos elementos.
 	*/
-	//@Override
-	//public boolean equals(Object otro);
+	@Override
+	public boolean equals(Object otro) {
+		if(!(otro instanceof Lista)){
+			return false;
+		}	
+		Lista<T> otraLista = (Lista<T>) otro;
+		if (otraLista.elementos() != elementos()) {
+			return false;
+		} else {
+			int i = 0;
+			while (i < (elementos()-1) && (otraLista.obtener(i)).equals(obtener(i))) {
+				i++;
+			}
+			if (otraLista.obtener(i).equals(obtener(i))) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
 	
 	
 }

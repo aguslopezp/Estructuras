@@ -34,5 +34,15 @@ public class mainListaArray {
     System.out.println("a: " + a);
     System.out.println("");
     System.out.println("Creo una sublista de 'a' desde la posición 1 a la 5 sin incluir: " + a.subLista(1, 5));
+
+    System.out.println("Creo otra lista (c) igual a 'b' para comprobar su igualdad.");
+    
+    ListaArray<Integer> c = new ListaArray<Integer>(10);
+    for (int h = 5; h < 10; h++) {
+      c.agregar(h);
+    }
+    System.out.println("b: " + b);
+    System.out.println("c: " + c);
+    System.out.println("Compruebo b.equals(c): " + b.equals(c) + ", y b.equals(a): " + b.equals(a));
   }
 }
