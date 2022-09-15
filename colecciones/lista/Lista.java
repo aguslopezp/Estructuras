@@ -121,7 +121,7 @@ public interface Lista<T> {
 	* La igualdad entre elementos se realiza considerando si ambos son {@code null} o, en caso contrario, mediante el método {@code equals(Object)}.
 	* @return {@code true} sii ambas listas tienen los mismos elementos.
 	*/
-	//@Override
-	//public boolean equals(Object otro);
+	@Override
+	public boolean equals(Object otro);
 
 }

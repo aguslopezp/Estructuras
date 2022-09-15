@@ -66,5 +66,13 @@ public class mainListaEnlazada {
     System.out.println("Vacío 'l'...");
     l.vaciar();
     System.out.println("l : " + l);
+
+    for (int h = 9; h > 6 ; h--) {
+      l.agregar(h);
+    }
+    System.out.println("l: " + l);
+    System.out.println("o: " + o);
+    System.out.println("l2: " + l2);
+    System.out.println("Compruebo l.equals(o): " + l.equals(o) + ", y l.equals(l2): " + l.equals(l2));
   }
 }
