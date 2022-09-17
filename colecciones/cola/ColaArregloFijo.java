@@ -1,5 +1,6 @@
 package colecciones.cola;
 
+import java.nio.channels.IllegalSelectorException;
 import java.util.Collection;
 
 import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
@@ -59,7 +60,11 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	public int elementos() {
 		return elementos;
 	}
-
+	/**
+	* Encola un elemento en el comienzo de la cola.
+	* @param elem el elemento a encolar
+	* @return {@code true} sii el elemento pudo ser encolado
+	*/
 	@Override
 	public boolean encolar(T elem) {
 		if (elementos() == arreglo.length) {
@@ -69,38 +74,80 @@ public class ColaArregloFijo<T> implements Cola<T> {
 				arreglo[i+1] = arreglo[i];
 			}
 			arreglo[0] = elem;
+			elementos++;
 			return true;
+		}
+	}
+	/**
+	* Desencola el primer elemento de la cola, y retorna el elemento desencolado, si ésta no es vacía.
+	* @return el primer elemento de la cola
+	* @throws IllegalStateException si la cola está vacía
+	* @see #esVacia()
+	*/
+	@Override
+	public T desencolar() throws IllegalStateException {
+		if (elementos() == 0) {
+			throw new IllegalStateException("Intenta desencolar en una cola vacía.");
+		} else {
+			T elementoSacado = elemento(elementos()-1); //Por FIFO el primer elemento que sale es el que entró primero, el que se encuentra al final del arreglo
+			elementos--;
+			return elementoSacado;
+		}
+	}
+	/**
+	* Retorna el primero de la cola, si ésta no es vacía.
+	* @return primer elemento de la cola
+	* @throws IllegalStateException si la cola está vacía
+	* @see #esVacia()
+	*/
+	@Override
+	public T primero() throws IllegalStateException {
+		if (!esVacia()) {
+			return elemento(elementos-1);
+		} else {
+			throw new IllegalStateException("Cola vacía.");
 		}
 	}
 
 	@Override
-	public T desencolar() {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");
-	}
-
-	@Override
-	public T primero() {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");	
-	}
-
-	@Override
 	public void vaciar() {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");	
+		elementos = 0;
 	}
 
 	@Override
 	public boolean repOK() {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");	
+		//estructura cola cumple con dinámica FIFO
+		
 	}
 
 	@Override
 	public String toString() {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");	
+		String c = "[ ";
+		for (int i = 0; i < elementos(); i++) {
+			c += elemento(i) + " ";
+		}	
+		c += "]";
+		return c;
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object other) {
-		throw new UnsupportedOperationException("Implementar y eliminar esta sentencia");	
+		if (!(other instanceof Cola))
+			return false;
+		ColaArregloFijo<T> otraCola = (ColaArregloFijo<T>) other;
+		if (otraCola.elementos() != elementos())
+			return false;
+		int i = 0;
+		while(elementos() != (arreglo.length)-1 && elemento(i).equals(otraCola.elemento(i))){
+			i++;
+		}
+		if(elemento(i).equals(otraCola.elemento(i))){
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	/**
