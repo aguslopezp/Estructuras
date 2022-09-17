@@ -8,7 +8,7 @@ package colecciones.pila;
 *  <li> pop       : desapila el elemento en el tope y retorna el elemento desapilado</li>
 *  <li> tope      : retorna el tope de la pila</li> 
 *  <li> esVacia   : Permite consultar si la pila está vacía</li>
-*  <li> estaLlena : Permite consultar si la pila está llena</li>
+*  <li> elementos : Permite consultar la cantidad de elementos de la pila</li>
 *  <li> repOK		  : Permite validar si una instancia satisface el invariante de representación</li>
 *  <li> toString	: Retorna una representación en forma de cadena</li>
 *  <li> equals		: Permite evaluar si otra instancia de pila es igual a esta</li>
@@ -40,10 +40,10 @@ public interface Pila<T> {
   public T tope();
 
   /**
-  * Permite evaluar si la pila está llena.
-  * @return {@code true} sii la pila está llena
+  * Retorna la cantidad de elementos de la pila
+  * @return la cantidad de elementos de la pila
   */
-  public boolean estaLlena();
+  public int elementos();
 
   /**
 	* Permite evaluar si la pila no tiene elementos.
