@@ -33,15 +33,16 @@ public class PilaArreglos<T> implements Pila<T> {
   /**
 	* Inserta un elemento en el tope de la pila.
 	* @param elem el elemento a apilar.
+  * @throws StackOverflowError si la pila está llena
 	* @return {@code true} sii el elemento pudo ser apilado
 	*/
-	public boolean push(T elem){
-    if (elementos() != arreglo.length) {
-      arreglo[elementos] = elem;
+	public boolean push(T elem) throws StackOverflowError {
+    if (elementos() <= arreglo.length) {
+      arreglo[elementos()] = elem;
       elementos++;
       return true;
     } else {
-      return false;
+      throw new StackOverflowError("La pila esta llena.");
     }
   }
 
@@ -98,9 +99,9 @@ public class PilaArreglos<T> implements Pila<T> {
 	@Override
   
 	public String toString() {
-    String pila = "\n ---\n";
+    String pila = "\n----\n";
     for (int i = elementos-1; i >= 0; i--) {
-      pila += "| " + elemento(i) + " |" + "\n" + " ---" + "\n";
+      pila += " " + elemento(i) + "\n" + "----" + "\n";
     }
     return pila;
   }
