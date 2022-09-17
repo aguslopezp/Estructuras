@@ -60,6 +60,7 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	public int elementos() {
 		return elementos;
 	}
+
 	/**
 	* Encola un elemento en el comienzo de la cola.
 	* @param elem el elemento a encolar
@@ -68,9 +69,10 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	@Override
 	public boolean encolar(T elem) {
 		if (elementos() == arreglo.length) {
+			//la cola está llena
 			return false;
 		} else {
-			for (int i = elementos()-1; i >= 0; i++) {
+			for (int i = elementos()-1; i >= 0; i--) {
 				arreglo[i+1] = arreglo[i];
 			}
 			arreglo[0] = elem;
@@ -113,6 +115,17 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	public void vaciar() {
 		elementos = 0;
 	}
+	/**
+	 * Retorna la reversa de la cola
+	 * @return la reversa de la cola
+	 */
+	public ColaArregloFijo<T> reversa(){
+		ColaArregloFijo<T> rev = new ColaArregloFijo<T>(this.elementos());
+		for (int i = 0; i < elementos(); i++) {
+			rev.encolar(elemento(i));
+		}
+		return rev;
+	}
 
 	@Override
 	public boolean repOK() {
@@ -135,14 +148,21 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	public boolean equals(Object other) {
 		if (!(other instanceof Cola))
 			return false;
-		ColaArregloFijo<T> otraCola = (ColaArregloFijo<T>) other;
+		Cola<T> otraCola = (Cola<T>) other;
 		if (otraCola.elementos() != elementos())
 			return false;
-		int i = 0;
-		while(elementos() != (arreglo.length)-1 && elemento(i).equals(otraCola.elemento(i))){
-			i++;
+		/*
+			creo copias de las colas para poder hacer la comparación elemento a elemento usando los 
+			metodos 'primero' y desencolando sin afectar a las originales
+		*/
+		Cola<T> copiaCola = this;
+		Cola<T> copiaOtraCola = otraCola;
+
+		while(elementos() > 1 && copiaCola.primero().equals(copiaOtraCola.primero())){
+			copiaCola.desencolar();
+			copiaOtraCola.desencolar();
 		}
-		if(elemento(i).equals(otraCola.elemento(i))){
+		if(copiaCola.primero().equals(copiaOtraCola.primero())){
 			return true;
 		} else {
 			return false;
@@ -156,7 +176,7 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	*/
 	@SuppressWarnings("unchecked")
    	private T elemento(int index) {
-        	return (T) arreglo[index];
-    	}
+      return (T) arreglo[index];
+    }
 
 }
