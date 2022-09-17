@@ -117,7 +117,7 @@ public class ColaArregloFijo<T> implements Cola<T> {
 	@Override
 	public boolean repOK() {
 		//estructura cola cumple con dinámica FIFO
-		
+		throw new IllegalStateException("falta implementar repOK.");
 	}
 
 	@Override

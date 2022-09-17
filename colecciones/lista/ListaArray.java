@@ -240,6 +240,7 @@ public class ListaArray<T> implements Lista<T>{
 	* @return {@code true} sii ambas listas tienen los mismos elementos.
 	*/
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object otro) {
 		if(!(otro instanceof Lista)){
 			return false;
